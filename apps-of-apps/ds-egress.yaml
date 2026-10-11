@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ds-egress
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/cyberglad/efg-gitops-demo.git
+    targetRevision: main
+    path: charts/demo-nginx                    # "форма" (в EFG — чарт из Nexus)
+    helm:
+      valueFiles:
+        - ../../values/ds-egress/values.yaml   # "начинка" с тегом — в Git
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

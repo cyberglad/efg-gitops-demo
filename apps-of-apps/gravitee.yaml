@@ -1,0 +1,30 @@
+# Как Gravitee в EFG: values прямо внутри манифеста (inline),
+# auto-sync ВЫКЛЮЧЕН — изменения ждут ручного Sync.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gravitee
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/cyberglad/efg-gitops-demo.git
+    targetRevision: main
+    path: charts/demo-nginx
+    helm:
+      values: |
+        replicaCount: 1
+        image:
+          registry: docker.io
+          repository: library/nginx
+          tag: "1.27.5-alpine"
+        config:
+          LICENSE_KEY: "demo-license-v1"
+          GATEWAY_MODE: "dev"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gravitee
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    # блока automated нет => только ручной Sync

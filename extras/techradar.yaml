@@ -1,0 +1,26 @@
+# Упражнение: скопируй этот файл в apps-of-apps/, закоммить и запушь.
+# ds-apps сам создаст новое приложение — руками в UI ничего не нужно.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: techradar
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/cyberglad/efg-gitops-demo.git
+    targetRevision: main
+    path: charts/demo-nginx
+    helm:
+      values: |
+        image:
+          tag: "1.28.0-alpine"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

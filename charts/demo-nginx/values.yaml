@@ -1,0 +1,22 @@
+# Значения по умолчанию ("форма" чарта). Реальные значения
+# переопределяются из values/ или inline в Application — как в EFG.
+replicaCount: 1
+
+image:
+  registry: docker.io          # в EFG тут был docker-registry.efgz.efg.corp (Harbor)
+  repository: library/nginx
+  tag: "1.27.5-alpine"
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 16Mi
+  limits:
+    memory: 64Mi
+
+service:
+  port: 80
+
+# Если не пусто — рендерится ConfigMap и подключается в под как env
+config: {}

@@ -1,0 +1,6 @@
+# Это тот файл, в который "Bamboo" коммитит новый тег через yq.
+replicaCount: 2
+image:
+  registry: docker.io
+  repository: library/nginx
+  tag: "1.27.5-alpine"

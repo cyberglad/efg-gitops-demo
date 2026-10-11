@@ -1,0 +1,20 @@
+# Головное приложение. Применяется ОДИН раз руками (kubectl apply),
+# дальше всё живёт из Git. Следит за папкой apps-of-apps/.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ds-apps
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/cyberglad/efg-gitops-demo.git
+    targetRevision: main
+    path: apps-of-apps
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd          # дочерние Application создаются в namespace ArgoCD
+  syncPolicy:
+    automated:                 # как в EFG: у головного auto-sync включён
+      prune: true
+      selfHeal: true
